@@ -3,21 +3,21 @@
 //  ****************************************************************************
 //  * Project   : SnifferDemo
 //  * Unit Name : uMain
-//  * Purpose   : Демонстрационный пример сниффера.
-//  * Author    : Александр (Rouse_) Багель
+//  * Purpose   : Р”РµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹Р№ РїСЂРёРјРµСЂ СЃРЅРёС„С„РµСЂР°.
+//  * Author    : РђР»РµРєСЃР°РЅРґСЂ (Rouse_) Р‘Р°РіРµР»СЊ
 //  * Version   : 1.01
 //  ****************************************************************************
 //
-//  Особая благодарность TrefptYc и группе Машина Времени,
-//  за оказанную моральную поддержку, в процессе написания данного примера :)
+//  РћСЃРѕР±Р°СЏ Р±Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚СЊ TrefptYc Рё РіСЂСѓРїРїРµ РњР°С€РёРЅР° Р’СЂРµРјРµРЅРё,
+//  Р·Р° РѕРєР°Р·Р°РЅРЅСѓСЋ РјРѕСЂР°Р»СЊРЅСѓСЋ РїРѕРґРґРµСЂР¶РєСѓ, РІ РїСЂРѕС†РµСЃСЃРµ РЅР°РїРёСЃР°РЅРёСЏ РґР°РЅРЅРѕРіРѕ РїСЂРёРјРµСЂР° :)
 //
 //  ****************************************************************************     
-//  От автора:
-//  Я не ставил перед собой целью написать что-то революционное,
-//  просто было желание показать сам принцип написания простейшего сниффера,
-//  что я и осуществил :)
+//  РћС‚ Р°РІС‚РѕСЂР°:
+//  РЇ РЅРµ СЃС‚Р°РІРёР» РїРµСЂРµРґ СЃРѕР±РѕР№ С†РµР»СЊСЋ РЅР°РїРёСЃР°С‚СЊ С‡С‚Рѕ-С‚Рѕ СЂРµРІРѕР»СЋС†РёРѕРЅРЅРѕРµ,
+//  РїСЂРѕСЃС‚Рѕ Р±С‹Р»Рѕ Р¶РµР»Р°РЅРёРµ РїРѕРєР°Р·Р°С‚СЊ СЃР°Рј РїСЂРёРЅС†РёРї РЅР°РїРёСЃР°РЅРёСЏ РїСЂРѕСЃС‚РµР№С€РµРіРѕ СЃРЅРёС„С„РµСЂР°,
+//  С‡С‚Рѕ СЏ Рё РѕСЃСѓС‰РµСЃС‚РІРёР» :)
 //
-//  Да, ну и работает все это бесчинство, только начиная с Windows 2000 :)
+//  Р”Р°, РЅСѓ Рё СЂР°Р±РѕС‚Р°РµС‚ РІСЃРµ СЌС‚Рѕ Р±РµСЃС‡РёРЅСЃС‚РІРѕ, С‚РѕР»СЊРєРѕ РЅР°С‡РёРЅР°СЏ СЃ Windows 2000 :)
 //
 //  * Fixed for the correct operation in Windows 7, 8, 8.1, 10: Sevastyanov S.V.
 
@@ -38,9 +38,9 @@ const
   MAX_ADAPTER_ADDRESS_LENGTH     = 8;
   IPHelper = 'iphlpapi.dll';
 
-  // Тип ICMP пакета
-  ICMP_ECHO             = 8;   // Запрос
-  ICMP_ECHOREPLY        = 0;   // Ответ
+  // РўРёРї ICMP РїР°РєРµС‚Р°
+  ICMP_ECHO             = 8;   // Р—Р°РїСЂРѕСЃ
+  ICMP_ECHOREPLY        = 0;   // РћС‚РІРµС‚
 
 resourcestring
   LOG_STR_0 = '==============================================================================' + sLineBreak;
@@ -57,56 +57,56 @@ type
   ULONG = DWORD;
   time_t = Longint;
 
-  // ip заголовок
-  // Более подробно в RFC 791
+  // ip Р·Р°РіРѕР»РѕРІРѕРє
+  // Р‘РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕ РІ RFC 791
   // http://rtfm.vn.ua/inet/prot/rfc791r.html
   TIPHeader = packed record
-    iph_verlen:   UCHAR;    // версия и длина заголовка
-    iph_tos:      UCHAR;    // тип сервиса
-    iph_length:   USHORT;   // длина всего пакета
-    iph_id:       USHORT;   // Идентификация
-    iph_offset:   USHORT;   // флаги и смещения
-    iph_ttl:      UCHAR;    // время жизни пакета
-    iph_protocol: UCHAR;    // протокол
-    iph_xsum:     USHORT;   // контрольная сумма
-    iph_src:      ULONG;    // IP-адрес отправителя
-    iph_dest:     ULONG;    // IP-адрес назначения
+    iph_verlen:   UCHAR;    // РІРµСЂСЃРёСЏ Рё РґР»РёРЅР° Р·Р°РіРѕР»РѕРІРєР°
+    iph_tos:      UCHAR;    // С‚РёРї СЃРµСЂРІРёСЃР°
+    iph_length:   USHORT;   // РґР»РёРЅР° РІСЃРµРіРѕ РїР°РєРµС‚Р°
+    iph_id:       USHORT;   // РРґРµРЅС‚РёС„РёРєР°С†РёСЏ
+    iph_offset:   USHORT;   // С„Р»Р°РіРё Рё СЃРјРµС‰РµРЅРёСЏ
+    iph_ttl:      UCHAR;    // РІСЂРµРјСЏ Р¶РёР·РЅРё РїР°РєРµС‚Р°
+    iph_protocol: UCHAR;    // РїСЂРѕС‚РѕРєРѕР»
+    iph_xsum:     USHORT;   // РєРѕРЅС‚СЂРѕР»СЊРЅР°СЏ СЃСѓРјРјР°
+    iph_src:      ULONG;    // IP-Р°РґСЂРµСЃ РѕС‚РїСЂР°РІРёС‚РµР»СЏ
+    iph_dest:     ULONG;    // IP-Р°РґСЂРµСЃ РЅР°Р·РЅР°С‡РµРЅРёСЏ
   end;
   PIPHeader = ^TIPHeader;
 
-  // tcp заголовок
-  // Более подробно в RFC 793
+  // tcp Р·Р°РіРѕР»РѕРІРѕРє
+  // Р‘РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕ РІ RFC 793
   // http://rtfm.vn.ua/inet/prot/rfc793r.html
   TTCPHeader = packed record
-    sourcePort: USHORT;       // порт отправителя
-    destinationPort: USHORT;  // порт назначения
-    sequenceNumber: ULONG;    // номер последовательности
-    acknowledgeNumber: ULONG; // номер подтверждения
-    dataoffset: UCHAR;        // смещение на область данных
-    flags: UCHAR;             // флаги
-    windows: USHORT;          // размер окна
-    checksum: USHORT;         // контрольная сумма
-    urgentPointer: USHORT;    // срочность
+    sourcePort: USHORT;       // РїРѕСЂС‚ РѕС‚РїСЂР°РІРёС‚РµР»СЏ
+    destinationPort: USHORT;  // РїРѕСЂС‚ РЅР°Р·РЅР°С‡РµРЅРёСЏ
+    sequenceNumber: ULONG;    // РЅРѕРјРµСЂ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
+    acknowledgeNumber: ULONG; // РЅРѕРјРµСЂ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ
+    dataoffset: UCHAR;        // СЃРјРµС‰РµРЅРёРµ РЅР° РѕР±Р»Р°СЃС‚СЊ РґР°РЅРЅС‹С…
+    flags: UCHAR;             // С„Р»Р°РіРё
+    windows: USHORT;          // СЂР°Р·РјРµСЂ РѕРєРЅР°
+    checksum: USHORT;         // РєРѕРЅС‚СЂРѕР»СЊРЅР°СЏ СЃСѓРјРјР°
+    urgentPointer: USHORT;    // СЃСЂРѕС‡РЅРѕСЃС‚СЊ
   end;
   PTCPHeader = ^TTCPHeader;
 
-  // udp заголовок
-  // Более подробно в RFC 768
+  // udp Р·Р°РіРѕР»РѕРІРѕРє
+  // Р‘РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕ РІ RFC 768
   // http://rtfm.vn.ua/inet/prot/rfc768r.html
   TUDPHeader = packed record
-    sourcePort:       USHORT;  // порт отправителя
-    destinationPort:  USHORT;  // порт назначения
-    len:              USHORT;  // длина пакета
-    checksum:         USHORT;  // контрольная сумма
+    sourcePort:       USHORT;  // РїРѕСЂС‚ РѕС‚РїСЂР°РІРёС‚РµР»СЏ
+    destinationPort:  USHORT;  // РїРѕСЂС‚ РЅР°Р·РЅР°С‡РµРЅРёСЏ
+    len:              USHORT;  // РґР»РёРЅР° РїР°РєРµС‚Р°
+    checksum:         USHORT;  // РєРѕРЅС‚СЂРѕР»СЊРЅР°СЏ СЃСѓРјРјР°
   end;
   PUDPHeader = ^TUDPHeader;
 
-  // ICMP заголовок
-  // Более подробно в RFC 792
+  // ICMP Р·Р°РіРѕР»РѕРІРѕРє
+  // Р‘РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕ РІ RFC 792
   // http://rtfm.vn.ua/inet/prot/rfc792r.html
   TICMPHeader = packed record
-   IcmpType      : BYTE;      // Тип пакета
-   IcmpCode      : BYTE;      // Код пакета
+   IcmpType      : BYTE;      // РўРёРї РїР°РєРµС‚Р°
+   IcmpCode      : BYTE;      // РљРѕРґ РїР°РєРµС‚Р°
    IcmpChecksum  : WORD;
    IcmpId        : WORD;
    IcmpSeq       : WORD;
@@ -115,7 +115,7 @@ type
   PICMPHeader = ^TICMPHeader;
 
 
-  // Структуры для выполнения GetAdaptersInfo
+  // РЎС‚СЂСѓРєС‚СѓСЂС‹ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ GetAdaptersInfo
   IP_ADDRESS_STRING = record
     S: array [0..15] of Char;
   end;
@@ -152,7 +152,7 @@ type
     LeaseExpires: time_t;
   end;                   
 
-  // Поток сниффера
+  // РџРѕС‚РѕРє СЃРЅРёС„С„РµСЂР°
   TSnifferThread = class(TThread)
   private
     WSA: TWSAData;
@@ -187,13 +187,13 @@ type
     procedure ReadLanInterfaces;
   end;
 
-  // При помощи данной функции мы определим наличие сетевых интерфейсов
-  // на локальном компьютере и информацию о них
+  // РџСЂРё РїРѕРјРѕС‰Рё РґР°РЅРЅРѕР№ С„СѓРЅРєС†РёРё РјС‹ РѕРїСЂРµРґРµР»РёРј РЅР°Р»РёС‡РёРµ СЃРµС‚РµРІС‹С… РёРЅС‚РµСЂС„РµР№СЃРѕРІ
+  // РЅР° Р»РѕРєР°Р»СЊРЅРѕРј РєРѕРјРїСЊСЋС‚РµСЂРµ Рё РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРёС…
   function GetAdaptersInfo(pAdapterInfo: PIP_ADAPTER_INFO;
     var pOutBufLen: ULONG): DWORD; stdcall; external IPHelper;
 
 const
-  // Размеры используемых структур
+  // Р Р°Р·РјРµСЂС‹ РёСЃРїРѕР»СЊР·СѓРµРјС‹С… СЃС‚СЂСѓРєС‚СѓСЂ
   IPHeaderSize = SizeOf(TIPHeader);
   ICMPHeaderSize = SizeOf(TICMPHeader);
   TCPHeaderSize = SizeOf(TTCPHeader);
@@ -210,20 +210,20 @@ uses ComObj;
 
 { TSnifferThread }
 
-// Инициализация слушающего сокета
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃР»СѓС€Р°СЋС‰РµРіРѕ СЃРѕРєРµС‚Р°
 function TSnifferThread.InitSocket: Boolean;
 var
   PromiscuousMode: Integer;
 begin
-  // инициализируем WinSock
+  // РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј WinSock
   Result := WSAStartup(WSA_VER, WSA) = NOERROR;
   if not Result then
   begin
-    LogData := 'Ошибка: ' + SysErrorMessage(WSAGetLastError);
+    LogData := 'РћС€РёР±РєР°: ' + SysErrorMessage(WSAGetLastError);
     Synchronize(ShowPacket);
     Exit;
   end;
-  // создаем сокет
+  // СЃРѕР·РґР°РµРј СЃРѕРєРµС‚
   hSocket := socket(AF_INET, SOCK_RAW, IPPROTO_IP);
   if hSocket = INVALID_SOCKET then
   begin
@@ -232,15 +232,15 @@ begin
   end;
   FillChar(Addr_in, SizeOf(sockaddr_in), 0);
   Addr_in.sin_family:= AF_INET;
-  // указываем за каким интерфейсом будем следить
+  // СѓРєР°Р·С‹РІР°РµРј Р·Р° РєР°РєРёРј РёРЅС‚РµСЂС„РµР№СЃРѕРј Р±СѓРґРµРј СЃР»РµРґРёС‚СЊ
   Addr_in.sin_addr.s_addr := inet_addr(PChar(Host));
-  // связываем сокет с локальным адресом
+  // СЃРІСЏР·С‹РІР°РµРј СЃРѕРєРµС‚ СЃ Р»РѕРєР°Р»СЊРЅС‹Рј Р°РґСЂРµСЃРѕРј
   if bind(hSocket, Addr_in, SizeOf(sockaddr_in)) <> 0 then
   begin
     DeInitSocket(WSAGetLastError);
     Exit;
   end;
-  // Переключаем интерфейс на прием всех пакетов проходящих через интерфейс - promiscuous mode.
+  // РџРµСЂРµРєР»СЋС‡Р°РµРј РёРЅС‚РµСЂС„РµР№СЃ РЅР° РїСЂРёРµРј РІСЃРµС… РїР°РєРµС‚РѕРІ РїСЂРѕС…РѕРґСЏС‰РёС… С‡РµСЂРµР· РёРЅС‚РµСЂС„РµР№СЃ - promiscuous mode.
   PromiscuousMode := 1;
   if ioctlsocket(hSocket, SIO_RCVALL, PromiscuousMode) <> 0 then
   begin
@@ -250,50 +250,50 @@ begin
   Result := True;
 end;
 
-// Завершение работы сокета
+// Р—Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹ СЃРѕРєРµС‚Р°
 procedure TSnifferThread.DeInitSocket(const ExitCode: Integer);
 begin
-  // Если была ошибка - выводим ее
+  // Р•СЃР»Рё Р±С‹Р»Р° РѕС€РёР±РєР° - РІС‹РІРѕРґРёРј РµРµ
   if ExitCode <> 0 then
   begin
-    LogData := 'Ошибка: ' + SysErrorMessage(ExitCode);
+    LogData := 'РћС€РёР±РєР°: ' + SysErrorMessage(ExitCode);
     Synchronize(ShowPacket);
   end;
-  // Закрываем сокет
+  // Р—Р°РєСЂС‹РІР°РµРј СЃРѕРєРµС‚
   if hSocket <> INVALID_SOCKET then closesocket(hSocket);
-  // Деинициализируем WinSock
+  // Р”РµРёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј WinSock
   WSACleanup;
 end;
 
-// Рабочая процедура потока сниффера
+// Р Р°Р±РѕС‡Р°СЏ РїСЂРѕС†РµРґСѓСЂР° РїРѕС‚РѕРєР° СЃРЅРёС„С„РµСЂР°
 procedure TSnifferThread.Execute;
 var
   PacketSize: Integer;
 begin
-  // Производим инициализацию
+  // РџСЂРѕРёР·РІРѕРґРёРј РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ
   if InitSocket then
   try
-    // Крутим поток до упора
+    // РљСЂСѓС‚РёРј РїРѕС‚РѕРє РґРѕ СѓРїРѕСЂР°
     while not Terminated do
     begin
       Application.ProcessMessages;
       if th_terminate then break;
 
-      // Ждем получения пакета (блокирующий режим)
+      // Р–РґРµРј РїРѕР»СѓС‡РµРЅРёСЏ РїР°РєРµС‚Р° (Р±Р»РѕРєРёСЂСѓСЋС‰РёР№ СЂРµР¶РёРј)
       PacketSize := recv(hSocket, Packet, MAX_PACKET_SIZE, 0);
-      // Если есть данные - производим их разбор
+      // Р•СЃР»Рё РµСЃС‚СЊ РґР°РЅРЅС‹Рµ - РїСЂРѕРёР·РІРѕРґРёРј РёС… СЂР°Р·Р±РѕСЂ
       if PacketSize > SizeOf(TIPHeader) then ParcePacket(PacketSize);
 
       Application.ProcessMessages;
       if th_terminate then break;
     end;
   finally
-    // В конце освобождаем занятые ресурсы
+    // Р’ РєРѕРЅС†Рµ РѕСЃРІРѕР±РѕР¶РґР°РµРј Р·Р°РЅСЏС‚С‹Рµ СЂРµСЃСѓСЂСЃС‹
     DeInitSocket(NO_ERROR);
   end;
 end;
 
-// Процедура разборки пакета
+// РџСЂРѕС†РµРґСѓСЂР° СЂР°Р·Р±РѕСЂРєРё РїР°РєРµС‚Р°
 procedure TSnifferThread.ParcePacket(const PacketSize: Word);
 var
   IPHeader: TIPHeader;
@@ -306,22 +306,22 @@ var
   Addr{, A, B{} : TInAddr;
 begin
   Inc(frmMain.TotalPacketCount);
-  // Читаем из буфера IP заголовок
+  // Р§РёС‚Р°РµРј РёР· Р±СѓС„РµСЂР° IP Р·Р°РіРѕР»РѕРІРѕРє
   Move(Packet[0], IPHeader, IPHeaderSize);
-  // Пишем время жизни пакета
+  // РџРёС€РµРј РІСЂРµРјСЏ Р¶РёР·РЅРё РїР°РєРµС‚Р°
   LogData := LOG_STR_0 +
     Format(LOG_STR_1, [frmMain.TotalPacketCount, IPHeader.iph_ttl]);
   SrcPort := 0;
   DestPort := 0;
   ExtendedInfo := '';
-  // определяем тип протокола
+  // РѕРїСЂРµРґРµР»СЏРµРј С‚РёРї РїСЂРѕС‚РѕРєРѕР»Р°
   case IPHeader.iph_protocol of
     IPPROTO_ICMP: // ICMP
     begin
       PacketType := 'ICMP';
-	    // Читаем ICMP заголовок
+	    // Р§РёС‚Р°РµРј ICMP Р·Р°РіРѕР»РѕРІРѕРє
       Move(Packet[IPHeaderSize], ICMPHeader, ICMPHeaderSize);
-	    // Смотрим тип пакета
+	    // РЎРјРѕС‚СЂРёРј С‚РёРї РїР°РєРµС‚Р°
       case ICMPHeader.IcmpCode of
         ICMP_ECHO: ExtendedInfo := Format(LOG_STR_6, ['Echo']);
         ICMP_ECHOREPLY: ExtendedInfo := Format(LOG_STR_6, ['Echo reply']);
@@ -332,38 +332,38 @@ begin
     IPPROTO_TCP: // TCP
     begin
       PacketType := 'TCP';
-	    // Читаем ТСР заголовок
+	    // Р§РёС‚Р°РµРј РўРЎР  Р·Р°РіРѕР»РѕРІРѕРє
       Move(Packet[IPHeaderSize], TCPHeader, TCPHeaderSize);
-	    // Смотрим порт отправителя и получателя
+	    // РЎРјРѕС‚СЂРёРј РїРѕСЂС‚ РѕС‚РїСЂР°РІРёС‚РµР»СЏ Рё РїРѕР»СѓС‡Р°С‚РµР»СЏ
       SrcPort := TCPHeader.sourcePort;
       DestPort := TCPHeader.destinationPort;
     end;
     IPPROTO_UDP: // UDP
     begin
       PacketType := 'UDP';
-	    // Читаем UDP заголовок
+	    // Р§РёС‚Р°РµРј UDP Р·Р°РіРѕР»РѕРІРѕРє
       Move(Packet[IPHeaderSize], UDPHeader, UDPHeaderSize);
-	    // Смотрим порт отправителя и получателя
+	    // РЎРјРѕС‚СЂРёРј РїРѕСЂС‚ РѕС‚РїСЂР°РІРёС‚РµР»СЏ Рё РїРѕР»СѓС‡Р°С‚РµР»СЏ
       SrcPort := UDPHeader.sourcePort;
       DestPort := UDPHeader.destinationPort;
     end;
   else
     PacketType := 'Unsupported (0x' + IntToHex(IPHeader.iph_protocol, 2) + ')';
   end;
-  // Пишем размер пакета
+  // РџРёС€РµРј СЂР°Р·РјРµСЂ РїР°РєРµС‚Р°
   LogData := LogData + Format(LOG_STR_2, [PacketSize, PacketType]);
   if ExtendedInfo <> '' then
     LogData := LogData + ExtendedInfo;
 
-  // Пишем IP адрес отправителя с портом
+  // РџРёС€РµРј IP Р°РґСЂРµСЃ РѕС‚РїСЂР°РІРёС‚РµР»СЏ СЃ РїРѕСЂС‚РѕРј
   Addr.S_addr := IPHeader.iph_src;
   LogData := LogData + Format(LOG_STR_3, [inet_ntoa(Addr), SrcPort]);
-  // Пишем IP адрес получателя с портом
+  // РџРёС€РµРј IP Р°РґСЂРµСЃ РїРѕР»СѓС‡Р°С‚РµР»СЏ СЃ РїРѕСЂС‚РѕРј
   Addr.S_addr := IPHeader.iph_dest;
   LogData := LogData + Format(LOG_STR_4, [inet_ntoa(Addr), DestPort]) + LOG_STR_7;
 
-  // Выводим содержимое пакета на экран (парсинг комментировать не буду, там все просто)
-  // получается что-то вроде этого:
+  // Р’С‹РІРѕРґРёРј СЃРѕРґРµСЂР¶РёРјРѕРµ РїР°РєРµС‚Р° РЅР° СЌРєСЂР°РЅ (РїР°СЂСЃРёРЅРі РєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РЅРµ Р±СѓРґСѓ, С‚Р°Рј РІСЃРµ РїСЂРѕСЃС‚Рѕ)
+  // РїРѕР»СѓС‡Р°РµС‚СЃСЏ С‡С‚Рѕ-С‚Рѕ РІСЂРѕРґРµ СЌС‚РѕРіРѕ:
   //
   // ------------------------------ Packet dump -----------------------------------
   // 000000 45 00 00 4E D8 91 00 00 | 80 11 DB 3B C0 A8 02 82     E..N.......;....
@@ -408,7 +408,7 @@ begin
   end
   else
     LogData := LogData + sLineBreak + sLineBreak; {}
-  // Выводим все что напарсерили в Memo
+  // Р’С‹РІРѕРґРёРј РІСЃРµ С‡С‚Рѕ РЅР°РїР°СЂСЃРµСЂРёР»Рё РІ Memo
   ShowPacket;
  // Synchronize(ShowPacket);
 end;
@@ -436,14 +436,14 @@ procedure TfrmMain.FormCreate(Sender: TObject);
    ShareInf    : PShareInf;
    SEI         : TShellExecuteInfo;
 begin
- // Создаем файловый маппинг и проецируем его
- // По сути это некая область оперативной памяти доступная любому приложению
- // которое знает идентификатор (GlobMapID) и
- // откроет этот файловый маппинг след двумя строками кода
+ // РЎРѕР·РґР°РµРј С„Р°Р№Р»РѕРІС‹Р№ РјР°РїРїРёРЅРі Рё РїСЂРѕРµС†РёСЂСѓРµРј РµРіРѕ
+ // РџРѕ СЃСѓС‚Рё СЌС‚Рѕ РЅРµРєР°СЏ РѕР±Р»Р°СЃС‚СЊ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё РґРѕСЃС‚СѓРїРЅР°СЏ Р»СЋР±РѕРјСѓ РїСЂРёР»РѕР¶РµРЅРёСЋ
+ // РєРѕС‚РѕСЂРѕРµ Р·РЅР°РµС‚ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ (GlobMapID) Рё
+ // РѕС‚РєСЂРѕРµС‚ СЌС‚РѕС‚ С„Р°Р№Р»РѕРІС‹Р№ РјР°РїРїРёРЅРі СЃР»РµРґ РґРІСѓРјСЏ СЃС‚СЂРѕРєР°РјРё РєРѕРґР°
  hMapping  := windows.CreateFileMapping(INVALID_HANDLE_VALUE, nil, PAGE_READWRITE, 0, SizeOf(TShareInf), GlobMapID);
  ShareInf  := MapViewOfFile(hMapping, FILE_MAP_ALL_ACCESS, 0, 0, SizeOf(TShareInf));
- // Теперь если все успешно выполнилось любая запись информации
- // в ShareInf будет в оперативной памяти и будет доступна любому приложению
+ // РўРµРїРµСЂСЊ РµСЃР»Рё РІСЃРµ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»РѕСЃСЊ Р»СЋР±Р°СЏ Р·Р°РїРёСЃСЊ РёРЅС„РѕСЂРјР°С†РёРё
+ // РІ ShareInf Р±СѓРґРµС‚ РІ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё Рё Р±СѓРґРµС‚ РґРѕСЃС‚СѓРїРЅР° Р»СЋР±РѕРјСѓ РїСЂРёР»РѕР¶РµРЅРёСЋ
  if hMapping <> INVALID_HANDLE_VALUE then
  begin
   frmMain.Caption := inttostr(ShareInf^.Field);
@@ -457,7 +457,7 @@ begin
    SEI.lpVerb := PChar('runas');
    SEI.lpFile := PChar(Application.ExeName);
    SEI.nShow := SW_SHOWNORMAL;
-   SEI.lpParameters:= 'Для доступа к сетивому интерфейсу нужны права администратора!';
+   SEI.lpParameters:= 'Р”Р»СЏ РґРѕСЃС‚СѓРїР° Рє СЃРµС‚РёРІРѕРјСѓ РёРЅС‚РµСЂС„РµР№СЃСѓ РЅСѓР¶РЅС‹ РїСЂР°РІР° Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°!';
    if ShellExecuteEx(@SEI) then
      begin
        Application.Terminate;
@@ -470,8 +470,8 @@ begin
   ReadLanInterfaces;
 end;
 
-// Читаем все IP адреса со всех присутствующих
-// в системе сетевых интерфейсов
+// Р§РёС‚Р°РµРј РІСЃРµ IP Р°РґСЂРµСЃР° СЃРѕ РІСЃРµС… РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‰РёС…
+// РІ СЃРёСЃС‚РµРјРµ СЃРµС‚РµРІС‹С… РёРЅС‚РµСЂС„РµР№СЃРѕРІ
 procedure TfrmMain.ReadLanInterfaces;
 var
   InterfaceInfo,
@@ -479,20 +479,20 @@ var
   IP: PIP_ADDR_STRING;
   Len: ULONG;
 begin
-  // Смотрим сколько памяти нам требуется?
+  // РЎРјРѕС‚СЂРёРј СЃРєРѕР»СЊРєРѕ РїР°РјСЏС‚Рё РЅР°Рј С‚СЂРµР±СѓРµС‚СЃСЏ?
   if GetAdaptersInfo(nil, Len) = ERROR_BUFFER_OVERFLOW then
   begin
-    // Берем нужное кол-во
+    // Р‘РµСЂРµРј РЅСѓР¶РЅРѕРµ РєРѕР»-РІРѕ
     GetMem(InterfaceInfo, Len);
     try
-      // выполнение функции
+      // РІС‹РїРѕР»РЅРµРЅРёРµ С„СѓРЅРєС†РёРё
       if GetAdaptersInfo(InterfaceInfo, Len) = ERROR_SUCCESS then
       begin
-        // Перечисляем все сетевые интерфейсы
+        // РџРµСЂРµС‡РёСЃР»СЏРµРј РІСЃРµ СЃРµС‚РµРІС‹Рµ РёРЅС‚РµСЂС„РµР№СЃС‹
         TmpPointer := InterfaceInfo;
         repeat
 
-          // перечисляем все IP адреса каждого интерфейса
+          // РїРµСЂРµС‡РёСЃР»СЏРµРј РІСЃРµ IP Р°РґСЂРµСЃР° РєР°Р¶РґРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР°
           IP := @TmpPointer.IpAddressList;
           repeat
             cbInterfaces.Items.Add(Format('%s - [%s]',
@@ -504,15 +504,15 @@ begin
         until TmpPointer = nil;
       end;
     finally
-      // Освобождаем занятую память
+      // РћСЃРІРѕР±РѕР¶РґР°РµРј Р·Р°РЅСЏС‚СѓСЋ РїР°РјСЏС‚СЊ
       FreeMem(InterfaceInfo);
     end;
   end;
-  // Смотрим - можем ли мы продолжать работу программы?
+  // РЎРјРѕС‚СЂРёРј - РјРѕР¶РµРј Р»Рё РјС‹ РїСЂРѕРґРѕР»Р¶Р°С‚СЊ СЂР°Р±РѕС‚Сѓ РїСЂРѕРіСЂР°РјРјС‹?
   if cbInterfaces.Items.Count = 0 then
   begin
-    memReport.Text := 'Сетевые интерфейсы не обнаружены.' + sLineBreak +
-      'Продолжение работы программы не возможно.';
+    memReport.Text := 'РЎРµС‚РµРІС‹Рµ РёРЅС‚РµСЂС„РµР№СЃС‹ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅС‹.' + sLineBreak +
+      'РџСЂРѕРґРѕР»Р¶РµРЅРёРµ СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹ РЅРµ РІРѕР·РјРѕР¶РЅРѕ.';
     btnStartStop.Enabled := False;
     Exit;
   end
@@ -520,7 +520,7 @@ begin
     cbInterfaces.ItemIndex := 0;
 end;
 
-// Запуск остановка потока
+// Р—Р°РїСѓСЃРє РѕСЃС‚Р°РЅРѕРІРєР° РїРѕС‚РѕРєР°
 procedure TfrmMain.btnStartStopClick(Sender: TObject);
 begin
   if FSnifferThread <> nil then
